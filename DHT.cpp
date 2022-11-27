@@ -48,8 +48,6 @@ void DHT::init(uint8_t micro_seconds, bool test, uint8_t alert_pin){
 
 
 void DHT::sensor_test(uint8_t alert_pin){
-    if (!test)
-    return;
 
   Serial.println("********** Test Begins **********");
 
