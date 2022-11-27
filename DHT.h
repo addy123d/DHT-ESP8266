@@ -56,7 +56,7 @@ class DHT{
 	public:
 		DHT(uint8_t pin, uint8_t type);
 		void init(uint8_t pulltime_in_usec = 55, bool test=false, uint8_t alert_pin=13);
-		void sensor_test(bool test, uint8_t alert_pin);
+		void sensor_test(uint8_t alert_pin);
 		void indicator(uint8_t alert_pin, int count);
 
 		double getTemperature(bool fahrenheit=false);
