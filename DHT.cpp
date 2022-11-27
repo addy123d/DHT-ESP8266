@@ -30,14 +30,88 @@ DHT::DHT(uint8_t pin, uint8_t type)
 }
 
 void DHT::init(uint8_t micro_seconds, bool test, uint8_t alert_pin){
-  // User should use different pins for DHT and alert_pin.
-  if (_pin == alert_pin)
+
+  if(test){
+    // User should use different pins for DHT and alert_pin.
+    if (_pin == alert_pin)
+    {
+      Serial.println("Pin Error: Use different pin for test");
+      return;
+    }
+
+
+    sensor_test(test, alert_pin);
+  }else{
+    return; //Simply return without doing anything
+  }
+}
+
+
+void DHT::sensor_test(bool test, uint8_t alert_pin){
+    if (!test)
+    return;
+
+  Serial.println("********** Test Begins **********");
+
+  float tempIn_fahrenheit = getTemperature(true);
+  float tempIn_Celsius = getTemperature();
+  float tempIn_Kelvin = getKelvin_temperature();
+   float humidity = getHumidity();
+
+  if (isnan(tempIn_fahrenheit) || isnan(tempIn_Celsius) || isnan(tempIn_Kelvin))
   {
-    Serial.println("Pin Error: Use different pin for test");
+    Serial.println("Test Failed: DHT is not responding");
+
+    /*Indicate user, that sensor is not working */
+    indicator(alert_pin, 2);
     return;
   }
 
-  // sensor_test(test, alert_pin);
+  String temp_in_F = "Temperature in Fahrenheit: ";
+  temp_in_F += tempIn_fahrenheit;
+  temp_in_F += " F";
+
+  String temp_in_C = "Temperature in Celsius: ";
+  temp_in_C += tempIn_Celsius;
+  temp_in_C += " C";
+  String temp_in_Kelvin = "Temperature in Kelvin: ";
+  temp_in_Kelvin += tempIn_Kelvin;
+  temp_in_Kelvin += " K";
+
+  String humidityReading = "Humidity Reading: ";
+  humidityReading += humidity;
+  humidityReading += " %";
+
+  Serial.println(temp_in_F);
+  Serial.println(temp_in_C);
+  Serial.println(temp_in_Kelvin);
+  Serial.println(humidityReading);
+
+  Serial.println("********** Test Success **********");
+}
+
+void DHT::indicator(uint8_t alert_pin, int count){
+
+  int loop_count = 0;
+
+  while(1){
+
+    {
+      digitalWrite(alert_pin, HIGH);
+
+      delay(100);
+
+      digitalWrite(alert_pin, LOW);
+
+      delay(100);
+
+      if(loop_count == count)
+        break;
+    }
+
+    loop_count++;
+  }
+
 }
 
 
