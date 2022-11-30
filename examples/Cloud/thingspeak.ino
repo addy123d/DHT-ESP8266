@@ -1,7 +1,7 @@
 #include "ThingSpeak.h"
 #include "DHT.h"
 
-DHT dht(2,DHT11);
+DHT dht(2,DHT11); //Pin D4
 
 unsigned long myChannelNumber = <your-channel-number>;
 const char * myWriteAPIKey = <your-api-key>;
